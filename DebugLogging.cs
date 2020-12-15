@@ -10,8 +10,10 @@ namespace ProjectLogging
      * == Purpose ==
      * This code sets up the debug logging library to be used  
      * 
-     * Changes: (date, comment)
-     * 
+     * Changes: (date,  comment)
+     * 2020-12-15,  Revised the program to have a default constructor.
+     *              Removed static from all functions. 
+     *              
      */
 
     /*
@@ -24,19 +26,22 @@ namespace ProjectLogging
         static string LogFileName { get; set; }
         static string LogFilePathAndName { get; set; }
 
-        /* Commented out constructor because I'm calling the CreateDebugLogger() instead to initialize it
+        /// <summary>
+        /// Default Constructor; Sets the path values and then creates the log file or verifies it exists.
+        /// </summary>
         public DebugLogging()
-        {
-            CreateDebugLogger();
-        }
-        */
-
-    public static void CreateDebugLogger()
         {
             LogFilePath = @"..\Debug\Logs\";
             LogFileName = $"{DateTime.Now:yyyyMMdd}_Log.txt";
             LogFilePathAndName = Path.Combine(LogFilePath, LogFileName);
+            CreateDebugLogger();
+        }
 
+        /// <summary>
+        /// Creates/Verifies a path and log file.
+        /// </summary>
+        public void CreateDebugLogger()
+        {
             if (!Directory.Exists(LogFilePath))
             {//TODO: --2-- need to fix this so that it doesn't check if a directory exist but it just makes it instead.
                 Directory.CreateDirectory(LogFilePath);
@@ -44,16 +49,19 @@ namespace ProjectLogging
 
             if (!File.Exists(Path.GetFullPath(LogFilePathAndName)))
             {
-                using (StreamWriter sw = File.CreateText(LogFilePathAndName)) { }//just creates and closes the file if it does not exist
+                using (StreamWriter sw = File.CreateText(LogFilePathAndName)) { }
             }//creates the debug file for specific day the program is run
         }
-
-        public static void LogActivity(string status)
-        {
+        /// <summary>
+        /// Accepts a string that will be written to the log file.
+        /// </summary>
+        /// <param name="status">Text to be logged.</param>
+        public void LogAction(string status)
+        {//writes to the debug logging file
             using (StreamWriter streamWriter = File.AppendText(Path.GetFullPath(LogFilePathAndName)))
             {
                 streamWriter.WriteLine($"{DateTime.Now:yyyy:MM:dd HH:mm:ss.ffff}, {status}");
             }
-        }//writes to the debug logging file
+        }
     }
 }
