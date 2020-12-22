@@ -13,6 +13,8 @@ namespace ProjectLogging
      * Changes: (date,  comment)
      * 2020-12-15,  Revised the program to have a default constructor.
      *              Removed static from all functions. 
+     * 2020-12-21,  Revised the LogFilePath to just be \Logs\ because \Debug\Logs was being placed in a new solutions \Debug\ folder
+     *              Removed colons in LogAction function between yyyMMdd and put hyphens
      *              
      */
 
@@ -31,7 +33,7 @@ namespace ProjectLogging
         /// </summary>
         public DebugLogging()
         {
-            LogFilePath = @"..\Debug\Logs\";
+            LogFilePath = @"..\Logs\";//Default Path starts in Debug folder of solutions
             LogFileName = $"{DateTime.Now:yyyyMMdd}_Log.txt";
             LogFilePathAndName = Path.Combine(LogFilePath, LogFileName);
             CreateDebugLogger();
@@ -60,7 +62,7 @@ namespace ProjectLogging
         {//writes to the debug logging file
             using (StreamWriter streamWriter = File.AppendText(Path.GetFullPath(LogFilePathAndName)))
             {
-                streamWriter.WriteLine($"{DateTime.Now:yyyy:MM:dd HH:mm:ss.ffff}, {status}");
+                streamWriter.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.ffff}, {status}");
             }
         }
     }
