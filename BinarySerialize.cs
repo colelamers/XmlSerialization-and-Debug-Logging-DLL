@@ -5,7 +5,17 @@ using System.Text;
 
 namespace ProjectLogging
 {
-    class BinarySerialize
+    /*
+     * Created by Cole Lamers 
+     * Date: 2020-12-06
+     * 
+     * == Purpose ==
+     * This code allows large amounts of data to be saved in a serialized binary file and loaded back in
+     * 
+     * Changes: (date,  comment)
+     *              
+     */
+    public class BinarySerialize
     {
         /// <summary>
         /// Writes the given object instance to a binary file.
