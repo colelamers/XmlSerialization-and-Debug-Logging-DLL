@@ -33,36 +33,23 @@ namespace ProjectLogging
     public class SetupConfigFile
     {
         /// <summary>
-        /// Saves the file to create it. Then it loads it in to the program.
-        /// </summary>
-        /// <typeparam name="ConfigObject">This should be the object of data that will be loaded into the config file.</typeparam>
-        /// <param name="config">The object type that the configuration will be based on.</param>
-        public static void LoadAndSaveFile<ConfigObject>(
-            ref ConfigObject config)
-        {//Combines both actions of save and load so both do not need to be called when program is initially run
-            //TODO: --1-- think of a better way to make this
-            SaveToFile(ref config);
-            LoadFromFile(ref config);
-        }
-        /// <summary>
         /// Detects if the specified file exists. It will create and/or serialize it in XML.
         /// </summary>
         /// <typeparam name="ConfigObject"></typeparam>
         /// <param name="config">The type of object passed through.</param>
         public static void SaveToFile<ConfigObject>(ref ConfigObject config)
-        {//Passes through a refernce to a class, generates the serializer that way
+        {
             if (!File.Exists(Path.GetFullPath(GetProjectName<ConfigObject>())))
             {
-                using (StreamWriter sw = File.CreateText(
-                    GetProjectName<ConfigObject>())) { }
-            }//Creates the config file if it doesn't exist
-            using (var stream = new FileStream(GetProjectName<ConfigObject>(), 
-                FileMode.Create))
+                using (StreamWriter sw = File.CreateText(GetProjectName<ConfigObject>())) { }
+            } // if; Creates the config file if it doesn't exist
+            using (var stream = new FileStream(GetProjectName<ConfigObject>(), FileMode.Create))
             {
                 XmlSerializer XML = new XmlSerializer(typeof(ConfigObject));
                 XML.Serialize(stream, config);
-            }//Serializes the object type passed through
-        }
+            } // using; Serializes the object type passed through
+        } // function SaveToFile
+
         /// <summary>
         /// Loads in an already existing XML file.
         /// </summary>
@@ -70,22 +57,22 @@ namespace ProjectLogging
         /// <param name="config">The type of object passed through.</param>
         public static void LoadFromFile<ConfigObject>(ref ConfigObject config)
         {//Loads in the existing referenced config file
-            using (var stream = new FileStream(GetProjectName<ConfigObject>(),
-                FileMode.Open))
+            using (var stream = new FileStream(GetProjectName<ConfigObject>(), FileMode.Open))
             {
                 var XML = new XmlSerializer(typeof(ConfigObject));
                 config = (ConfigObject)XML.Deserialize(stream);
-            }
-        }
+            } // using
+        } // function LoadFromFile
+
         /// <summary>
         /// Returns the full XML file name.
         /// </summary>
         /// <returns></returns>
         public static string GetProjectName<ConfigObject>()
-        {//Creates a config file based on the project assembly name
+        {
             System.Type configtype = typeof(ConfigObject);
             Assembly assem = Assembly.GetAssembly(configtype);
             return assem.GetName().Name + "_Config.xml";
-        }
+        } // function GetProjectName; Creates a config file based on the project assembly name
     }
 }
